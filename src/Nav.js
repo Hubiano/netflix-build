@@ -31,7 +31,7 @@ function Nav() {
           src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.freepnglogos.com%2Fuploads%2Fnetflix-logo-0.png&f=1&nofb=1"
           alt="netflix"
         />
-        <div class="nav__userName">
+        <div className="nav__userName">
           <h5> {user.email}</h5>
         </div>
         <img

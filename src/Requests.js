@@ -1,7 +1,6 @@
-const dotenv = require("dotenv");
-dotenv.config();
+require("dotenv").config();
 
-const API_KEY = "752cba0237b22630a7e81d76734946de";
+const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
 
 const requests = {
   fetchTrending: `/trending/all/week?api_key=${API_KEY}&language=en-US`,

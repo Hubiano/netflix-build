@@ -1,13 +1,37 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectUser } from "../features/userSlice";
-import { auth } from "../firebase";
+import db, { auth } from "../firebase";
 import Nav from "../Nav";
+import PlanScreen from "./PlanScreen";
 
 import "./ProfileScreen.css";
 
 function ProfileScreen() {
   const user = useSelector(selectUser);
+  const [subscription, setSubscription] = useState(null);
+
+  useEffect(() => {
+    db.collection("customers")
+      .doc(user.uid)
+      .collection("subscriptions")
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach(async (subscription) => {
+          const {
+            role,
+            current_period_end,
+            current_period_start,
+          } = subscription.data();
+          setSubscription({
+            role,
+            current_period_end,
+            current_period_start,
+          });
+        });
+      });
+  }, [user.uid]);
+  console.log(subscription);
   return (
     <div className="profileScreen">
       <Nav />
@@ -21,7 +45,13 @@ function ProfileScreen() {
           <div className="profileScreen__details">
             <h2>{user.email}</h2>
             <div className="profileScreen__plans">
-              <h3>Plans</h3>
+              <p>
+                Plans (Current Plan:{" "}
+                {subscription ? subscription?.role : "You have no active plans"}
+                )
+              </p>
+
+              <PlanScreen />
               <button
                 onClick={() => auth.signOut()}
                 className="profileScreen__signOut"
